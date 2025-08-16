@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blue Nova — College Fest</title>
+  <meta name="description" content="Blue Nova — a minimal, glassy single-page site for a college fest." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Primary SEO -->
+  <title>Blue Nova ’25 — College Fest</title>
+  <meta name="description"
+    content="Blue Nova ’25 — A minimal, glassy celebration of ideas, code, art, and rhythm. Join students from across the region for competitions, performances, and workshops.">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://myname.vercel.app/" />
+
+  <!-- Favicons -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Theme Color (browser UI) -->
+  <meta name="theme-color" content="#0A1A2F" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Blue Nova ’25 — College Fest">
+  <meta property="og:description" content="A minimal, glassy celebration of ideas, code, art, and rhythm.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://myname.vercel.app/">
+  <meta property="og:image" content="https://myname.vercel.app/preview.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blue Nova ’25 — College Fest">
+  <meta name="twitter:description" content="A minimal, glassy celebration of ideas, code, art, and rhythm.">
+  <meta name="twitter:image" content="https://myname.vercel.app/preview.jpg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD Schema for rich snippets -->
+
+  <style>
+    :root {
+      --hue: 210;
+      /* base blue */
+      --bg-0: hsl(var(--hue) 50% 6%);
+      --bg-1: hsl(var(--hue) 80% 10% / 0.6);
+      --glass: hsl(var(--hue) 60% 70% / 0.08);
+      --stroke: hsl(var(--hue) 80% 70% / 0.25);
+      --text: hsl(210 20% 96%);
+      --muted: hsl(210 12% 70%);
+      --accent: hsl(205 100% 60%);
+      --accent-2: hsl(220 100% 73%);
+      --shadow: 0 20px 40px hsl(var(--hue) 60% 6% / 0.45);
+      --radius: 18px;
+      --blur: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 1200px at 10% 10%, hsl(205 90% 12% / .6), transparent 60%),
+        radial-gradient(900px 900px at 80% 20%, hsl(220 90% 16% / .5), transparent 70%),
+        radial-gradient(1200px 1000px at 50% 90%, hsl(200 100% 14% / .5), transparent 70%),
+        var(--bg-0);
+      overflow-x: hidden;
+    }
+
+    /* Subtle animated background blobs */
+    .bg-blob {
+      position: fixed;
+      inset: -20vmax;
+      pointer-events: none;
+      filter: blur(80px);
+      opacity: .25;
+      background:
+        radial-gradient(closest-side, hsl(205 100% 60% / .15), transparent 70%) 10% 30%/35% 35% no-repeat,
+        radial-gradient(closest-side, hsl(220 100% 70% / .12), transparent 70%) 70% 10%/40% 40% no-repeat,
+        radial-gradient(closest-side, hsl(195 100% 55% / .10), transparent 70%) 80% 80%/35% 35% no-repeat;
+      animation: float 36s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate3d(2rem, -1.5rem, 0) scale(1.03);
+      }
+    }
+
+    /* Glass utility */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin: 16px auto;
+      max-width: 1100px;
+      padding: 10px 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      transition: backdrop-filter .3s ease, background .3s ease, transform .3s ease;
+    }
+
+    .nav.scrolled {
+      background: hsl(var(--hue) 40% 8% / .45);
+      backdrop-filter: blur(20px) saturate(120%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand span {
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      opacity: .8;
+      padding: 8px 12px;
+      border-radius: 12px;
+    }
+
+    .nav a:hover {
+      opacity: 1;
+      background: hsl(var(--hue) 30% 35% / .14);
+    }
+
+    .nav .cta {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #00111a;
+      font-weight: 700;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple .6s ease-out;
+      background: #fff8;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(12);
+        opacity: 0;
+      }
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 1100px;
+      margin: 40px auto 24px;
+      padding: 28px;
+      display: grid;
+      gap: 22px;
+      grid-template-columns: 1.2fr .8fr;
+      align-items: center;
+    }
+
+    .hero-card {
+      padding: 28px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 7vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-weight: 400;
+      margin: 8px 0 22px;
+      max-width: 60ch;
+    }
+
+    .badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: hsl(var(--hue) 30% 85% / .06);
+      color: var(--text);
+      opacity: .9;
+    }
+
+    .hero-media {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, transparent 60%, hsl(210 90% 4% / .45));
+    }
+
+    .orb {
+      width: 72%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(45% 55% at 40% 35%, #fff8, transparent 65%),
+        radial-gradient(circle at 70% 70%, hsl(210 100% 70% / .6), hsl(205 100% 60% / .6), hsl(210 100% 50% / .6));
+      filter: blur(2px) saturate(130%);
+      box-shadow: inset 0 1px 30px #fff2, 0 40px 120px hsl(205 100% 60% / .25);
+      transform: translateZ(0);
+      transition: transform .5s ease;
+    }
+
+    .hero-media:hover .orb {
+      transform: rotate(6deg) scale(1.03);
+    }
+
+    /* SECTION */
+    section {
+      max-width: 1100px;
+      margin: 18px auto;
+      padding: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.2rem, 3.2vw, 2rem);
+      letter-spacing: .3px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    /* EVENTS grid with glass cards + tilt */
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .card {
+      grid-column: span 4;
+      min-height: 180px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 40px hsl(210 50% 4% / .55);
+      background: hsl(210 50% 60% / .08);
+    }
+
+    .card h3 {
+      margin: 6px 0 6px;
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: .8rem;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      opacity: .9;
+    }
+
+    .card .shine {
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 180deg at 50% 50%, #ffffff20, transparent 60%);
+      transform: translateZ(40px) rotate(0deg);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* SCHEDULE horizontal scroll */
+    .schedule {
+      display: flex;
+      gap: 12px;
+      overflow: auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .slot {
+      min-width: 260px;
+      scroll-snap-align: start;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .time {
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .loc {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    /* GALLERY */
+    .gallery {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .gallery .g {
+      grid-column: span 2;
+      aspect-ratio: 4/3;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(110%) contrast(105%);
+      transition: transform .4s ease;
+    }
+
+    .gallery .g:hover img {
+      transform: scale(1.06);
+    }
+
+    /* FAQ */
+    details.faq {
+      padding: 14px 16px;
+    }
+
+    details.faq summary {
+      cursor: pointer;
+      list-style: none;
+    }
+
+    details.faq[open] {
+      background: hsl(210 40% 60% / .08);
+    }
+
+    /* FOOTER */
+    footer {
+      margin: 40px auto 80px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    /* LIGHTBOX & MODAL */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      z-index: 100;
+      background: hsl(210 60% 4% / .6);
+      backdrop-filter: blur(10px);
+    }
+
+    .overlay.show {
+      display: grid;
+    }
+
+    .lightbox {
+      max-width: min(1000px, 90vw);
+      max-height: 85vh;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .lightbox img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal {
+      max-width: 560px;
+      width: 92vw;
+      padding: 18px;
+    }
+
+    .modal h3 {
+      margin: 6px 0 10px;
+    }
+
+    .modal form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: hsl(210 50% 85% / .06);
+      color: var(--text);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: hsl(210 60% 85% / .08);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #00111a;
+      border: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 14px;
+      display: none;
+      z-index: 120;
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px) scale(.98);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        grid-column: span 12;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .ripple {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-blob" aria-hidden="true"></div>
+  <!-- NAV -->
+  <nav class="nav glass" id="nav"><a class="brand" href="#top" aria-label="Blue Nova home"><svg viewBox="0 0 48 48"
+        fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="hsl(205,100%,65%)" />
+            <stop offset="1" stop-color="hsl(220,100%,75%)" />
+          </linearGradient>
+        </defs>
+        <path d="M10 32c0-6 6-10 14-10s14 4 14 10-6 10-14 10S10 38 10 32Z" fill="url(#g)" />
+        <path d="M14 16a10 10 0 1 1 20 0c0 5.5-4.5 10-10 10s-10-4.5-10-10Z" fill="url(#g)" opacity=".6" />
+      </svg><span>Blue Nova Fest</span></a>
+    <div role="navigation" aria-label="Primary"><a href="#events">Events</a><a href="#schedule">Schedule</a><a
+        href="#gallery">Gallery</a><a href="#faq">FAQ</a><button class="cta" id="open-register"
+        type="button">Register</button></div>
+  </nav>
+  <!-- HERO -->
+  <header id="top" class="hero">
+    <div class="hero-card glass reveal">
+      <h1>Blue Nova <span style="opacity:.6">’25</span></h1>
+      <p class="sub">A minimal,
+        glassy celebration of ideas,
+        code,
+        art,
+        and rhythm. Join students from across the region for two days of competitions,
+        performances,
+        and workshops.</p>
+      <div class="badges" aria-label="event meta"><span class="badge">Oct 18–19</span><span class="badge">Indigo
+          Hall,
+          City Campus</span><span class="badge">Open to all colleges</span></div>
+      <div style="margin-top:18px; display:flex; gap:10px;"><a class="btn" href="#events">Explore events</a><button
+          class="btn primary" id="open-register-hero" type="button">Grab your pass</button></div>
+    </div>
+    <div class="hero-media glass reveal" aria-hidden="true">
+      <div class="orb"></div>
+    </div>
+  </header>
+  <!-- EVENTS -->
+  <section id="events" aria-labelledby="events-title">
+    <div class="section-head">
+      <h2 id="events-title">Signature Events</h2><span class="muted">Hover to tilt. Click a card to learn
+        more.</span>
+    </div>
+    <div class="grid">
+      <article class="card glass tilt reveal" tabindex="0" data-title="HackSprint"
+        data-desc="A 8-hour rapid-build hackathon. Teams of 2–4.">
+        <div class="shine"></div>
+        <h3>HackSprint</h3>
+        <p class="muted">Rapid build hackathon • 8 hours</p>
+        <div class="chip-row"><span class="chip">Tech</span><span class="chip">Teams</span><span
+            class="chip">Prizes</span></div>
+      </article>
+      <article class="card glass tilt reveal" tabindex="0" data-title="Pitch Perfect"
+        data-desc="90-second startup pitches with live feedback from founders.">
+        <div class="shine"></div>
+        <h3>Pitch Perfect</h3>
+        <p class="muted">Lightning startup pitches</p>
+        <div class="chip-row"><span class="chip">Business</span><span class="chip">Mentors</span><span
+            class="chip">Crowd vote</span></div>
+      </article>
+      <article class="card glass tilt reveal" tabindex="0" data-title="Canvas Jam"
+        data-desc="Live digital art battle. Audience decides the winner.">
+        <div class="shine"></div>
+        <h3>Canvas Jam</h3>
+        <p class="muted">Digital art battle</p>
+        <div class="chip-row"><span class="chip">Design</span><span class="chip">Live</span><span
+            class="chip">Audience</span></div>
+      </article>
+      <article class="card glass tilt reveal" tabindex="0" data-title="Beat Street"
+        data-desc="Band & DJ showcase under neon lights.">
+        <div class="shine"></div>
+        <h3>Beat Street</h3>
+        <p class="muted">Bands • DJs • Lights</p>
+        <div class="chip-row"><span class="chip">Music</span><span class="chip">Night</span><span
+            class="chip">Energy</span></div>
+      </article>
+      <article class="card glass tilt reveal" tabindex="0" data-title="Quiz Quasar"
+        data-desc="General quiz with a sci-tech twist.">
+        <div class="shine"></div>
+        <h3>Quiz Quasar</h3>
+        <p class="muted">General+Sci-Tech</p>
+        <div class="chip-row"><span class="chip">Trivia</span><span class="chip">Teams</span><span
+            class="chip">Buzzer</span></div>
+      </article>
+      <article class="card glass tilt reveal" tabindex="0" data-title="Nova Run" data-desc="5K fun run around campus.">
+        <div class="shine"></div>
+        <h3>Nova Run</h3>
+        <p class="muted">5K • Sunrise</p>
+        <div class="chip-row"><span class="chip">Fitness</span><span class="chip">Open</span><span
+            class="chip">Medals</span></div>
+      </article>
+    </div>
+  </section>
+  <!-- SCHEDULE -->
+  <section id="schedule" aria-labelledby="schedule-title">
+    <div class="section-head">
+      <h2 id="schedule-title">Schedule</h2><span class="muted">Drag sideways • Snap scroll</span>
+    </div>
+    <div class="schedule reveal" aria-label="horizontal schedule">
+      <div class="slot glass">
+        <div class="time">Day 1 · 09:00</div><strong>Opening & Icebreakers</strong>
+        <div class="loc">Indigo Hall</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">10:00</div><strong>HackSprint Kickoff</strong>
+        <div class="loc">Lab A+B</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">13:00</div><strong>Workshops: Figma & AI</strong>
+        <div class="loc">Design Studio</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">17:30</div><strong>Pitch Perfect</strong>
+        <div class="loc">Auditorium</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">19:30</div><strong>Beat Street</strong>
+        <div class="loc">Main Stage</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">Day 2 · 08:00</div><strong>Nova Run</strong>
+        <div class="loc">Track</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">11:00</div><strong>Canvas Jam</strong>
+        <div class="loc">Studio</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">15:30</div><strong>Quiz Quasar Finals</strong>
+        <div class="loc">Lecture Hall 2</div>
+      </div>
+      <div class="slot glass">
+        <div class="time">18:00</div><strong>Closing & Awards</strong>
+        <div class="loc">Indigo Hall</div>
+      </div>
+    </div>
+  </section>
+  <!-- GALLERY -->
+  <section id="gallery" aria-labelledby="gallery-title">
+    <div class="section-head">
+      <h2 id="gallery-title">Gallery</h2><span class="muted">Click to view</span>
+    </div>
+    <div class="gallery reveal">
+      <!-- Royalty-free placeholders (replace with your own) -->
+      <div class="g glass"><img
+          src="https://images.unsplash.com/photo-1515165562835-c3b8c7c9ee0f?q=80&w=1200&auto=format&fit=crop"
+          alt="Concert lights"></div>
+      <div class="g glass"><img
+          src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop"
+          alt="Design workshop"></div>
+      <div class="g glass"><img
+          src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop"
+          alt="Hackathon"></div>
+      <div class="g glass"><img
+          src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=1200&auto=format&fit=crop"
+          alt="Crowd cheering"></div>
+      <div class="g glass"><img
+          src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop"
+          alt="Art tablet"></div>
+      <div class="g glass"><img
+          src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?q=80&w=1200&auto=format&fit=crop"
+          alt="Stage smoke"></div>
+    </div>
+  </section>
+  <!-- FAQ -->
+  <section id="faq" aria-labelledby="faq-title">
+    <div class="section-head">
+      <h2 id="faq-title">FAQ</h2><span class="muted">Tap to toggle</span>
+    </div>
+    <div class="glass reveal" style="padding:12px;">
+      <details class="faq">
+        <summary><strong>Who can participate?</strong></summary>
+        <p class="muted">Students from any college (with valid ID). Some events allow open category entries.
+        </p>
+      </details>
+      <details class="faq">
+        <summary><strong>Is there an entry fee?</strong></summary>
+        <p class="muted">Most events are free. Premium events (HackSprint, Beat Street) require a fest pass.
+        </p>
+      </details>
+      <details class="faq">
+        <summary><strong>Will certificates be provided?</strong></summary>
+        <p class="muted">Yes—digital certificates for winners and participants where applicable.</p>
+      </details>
+    </div>
+  </section>
+  <footer><small>© 2025 Blue Nova Fest · Made with glass & blues</small></footer>
+  <!-- LIGHTBOX OVERLAY -->
+  <div class="overlay" id="lightbox">
+    <div class="lightbox glass" role="dialog" aria-modal="true" aria-label="Image preview"><img src="" alt=""></div>
+  </div>
+  <!-- REGISTER MODAL -->
+  <div class="overlay" id="modal">
+    <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="reg-title">
+      <h3 id="reg-title">Register for Blue Nova</h3>
+      <form id="reg-form" novalidate>
+        <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text"
+            placeholder="Aadi Sharma" required></div>
+        <div class="field"><label for="college">College</label><input id="college" name="college" type="text"
+            placeholder="City Engineering College" required></div>
+        <div class="field"><label for="event">Event</label><select id="event" name="event" required>
+            <option value="">Select an event</option>
+            <option>HackSprint</option>
+            <option>Pitch Perfect</option>
+            <option>Canvas Jam</option>
+            <option>Beat Street</option>
+            <option>Quiz Quasar</option>
+            <option>Nova Run</option>
+          </select></div>
+        <div class="actions"><button type="button" class="btn" id="close-modal">Cancel</button><button type="submit"
+            class="btn primary">Submit</button></div>
+      </form>
+    </div>
+  </div>
+  <!-- TOAST -->
+  <div class="toast glass" id="toast" role="status" aria-live="polite">Registered ! Check your inbox
+    for a confirmation email.</div>
+  <script> // Sticky nav style on scroll
+    const nav = document.getElementById('nav');
+    const setNav = () => nav.classList.toggle('scrolled', window.scrollY > 6);
+    setNav();
+
+    addEventListener('scroll', setNav, {
+      passive: true
+    });
+
+    // Scroll reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
+    }
+
+      , {
+        threshold: .14
+      });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Button ripple on click (delegated)
+    function addRipple(e) {
+      const btn = e.currentTarget;
+      const r = document.createElement('span');
+      r.className = 'ripple';
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.style.width = r.style.height = size + 'px';
+      r.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      r.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 600);
+    }
+
+    document.querySelectorAll('.cta, .btn, .primary').forEach(b => b.addEventListener('click', addRipple));
+
+    // Card tilt on hover/mousemove
+    const tiltCards = document.querySelectorAll('.tilt');
+
+    tiltCards.forEach(card => {
+      let leaveTimer;
+
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
+        const rx = (y - .5) * -8; // rotateX
+        const ry = (x - .5) * 10; // rotateY
+
+        card.style.transform = `perspective(800px) rotateX($ {
+            rx
+          }
+
+          deg) rotateY($ {
+            ry
+          }
+
+          deg) translateZ(0)`;
+        const shine = card.querySelector('.shine');
+
+        shine && (shine.style.transform = `translateZ(40px) rotate($ {
+              (x + y) * 20
+            }
+
+            deg)`);
+        clearTimeout(leaveTimer);
+      });
+      const reset = () => card.style.transform = '';
+
+      card.addEventListener('mouseleave', () => {
+        leaveTimer = setTimeout(reset, 120);
+      });
+
+      card.addEventListener('click', () => {
+        const title = card.dataset.title || 'Event';
+        const desc = card.dataset.desc || '';
+
+        showToast(`$ {
+            title
+          }
+
+          — $ {
+            desc
+          }
+
+          `);
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') card.click();
+      });
+    });
+
+    // Gallery lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+
+    document.querySelectorAll('.gallery .g img').forEach(img => {
+      img.addEventListener('click', () => {
+        lbImg.src = img.src;
+        lb.classList.add('show');
+      });
+    });
+
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb || e.target === lbImg) lb.classList.remove('show');
+    });
+
+    // Register modal
+    const modal = document.getElementById('modal');
+    const openReg = () => modal.classList.add('show');
+    const closeReg = () => modal.classList.remove('show');
+
+    document.getElementById('open-register').addEventListener('click', openReg);
+    document.getElementById('open-register-hero').addEventListener('click', openReg);
+    document.getElementById('close-modal').addEventListener('click', closeReg);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeReg();
+    });
+
+    // Fake submit with lightweight validation
+    document.getElementById('reg-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.target;
+      if (!form.reportValidity()) return;
+      closeReg();
+      showToast('Registered! Check your inbox for a confirmation email.');
+      form.reset();
+    });
+
+    // Toast helper
+    const toast = document.getElementById('toast');
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(showToast.t);
+      showToast.t = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    // Accessibility: Esc closes overlays
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.overlay.show').forEach(o => o.classList.remove('show'));
+      }
+    });
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Blue Nova ’25 — College Fest",
+    "startDate": "2025-10-18T09:00",
+    "endDate": "2025-10-19T20:00",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "Place",
+      "name": "Indigo Hall, City Campus",
+      "address": "City Campus, Your City"
+    },
+    "image": "https://myname.vercel.app/preview.jpg",
+    "description": "A minimal, glassy celebration of ideas, code, art, and rhythm with competitions, performances, and workshops.",
+    "organizer": {
+      "@type": "Organization",
+      "name": "Blue Nova Fest Committee",
+      "url": "https://myname.vercel.app"
+    }
+  }
+  </script>
+</body>
+
+</html>
